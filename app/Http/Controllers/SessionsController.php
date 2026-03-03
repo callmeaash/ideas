@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
 
 class SessionsController extends Controller
 {
-    public function create() {
+    public function create()
+    {
         return view('auth.login');
     }
 
-    public function store() {
+    public function store()
+    {
         $attributes = request()->validate([
             'email' => ['required', 'string', 'max:255', 'email'],
             'password' => ['required', 'string', 'max:255'],
@@ -27,7 +29,8 @@ class SessionsController extends Controller
         return redirect()->route('home')->with('success', 'You have been logged in.');
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         auth()->logout();
 
         return redirect()->route('home')->with('success', 'You have been logged out.');

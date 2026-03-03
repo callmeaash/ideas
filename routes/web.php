@@ -1,11 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', fn () => view('welcome'))->name('home');
+
+    Route::redirect('/', '/ideas');
+    Route::get('/ideas', [IdeaController::class, 'index'])->name('home');
+    Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });
 

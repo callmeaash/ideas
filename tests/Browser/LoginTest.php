@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it ('logs in a user', function () {
+it('logs in a user', function () {
     $user = User::factory()->create([
         'password' => '@JohnDoe123',
     ]);
@@ -12,21 +12,19 @@ it ('logs in a user', function () {
         ->fill('password', '@JohnDoe123')
         ->submit()
         ->assertPathIs('/');
-    
+
     $this->assertAuthenticated();
 
     expect(auth()->user()->email)->toBe($user->email);
 });
 
-
-it ('logs out a user', function() {
+it('logs out a user', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user);
-    
-    visit('/')->click('Logout')
+
+    visit('/')->click('Log Out')
         ->assertPathIs('/login');
 
     $this->assertGuest();
 });
-

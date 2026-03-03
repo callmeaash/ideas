@@ -1,6 +1,6 @@
 <?php
 
-it ('registers a user', function () {
+it('registers a user', function () {
     visit('/register')
         ->fill('name', 'John Doe')
         ->fill('email', 'john@example.com')
