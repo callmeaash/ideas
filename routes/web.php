@@ -10,6 +10,8 @@ Route::middleware('auth')->group(function () {
     Route::redirect('/', '/ideas');
     Route::get('/ideas', [IdeaController::class, 'index'])->name('home');
     Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show');
+    Route::post('/ideas', [IdeaController::class, 'store'])->name('idea.store');
+    Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });
 

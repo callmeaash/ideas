@@ -1,3 +1,5 @@
-<a {{ $attributes->merge(['class' => 'border border-border rounded-lg bg-card p-4 md:text-sm block']) }}>
+@props(['as' => 'a'])
+
+<{{ $as }} {{ $attributes->merge(['class' => 'border border-border rounded-lg bg-card p-4 md:text-sm block']) }}>
     {{ $slot }}
-</a>
+</{{ $as }}>
