@@ -46,6 +46,8 @@ class IdeaController extends Controller
             'title' => ['string', 'required', 'min:3', 'max:255'],
             'description' => ['string', 'nullable'],
             'status' => ['required', Rule::enum(IdeaStatus::class)],
+            'links' => ['nullable', 'array'],
+            'links.*' => ['string', 'url'],
         ]);
 
         auth()->user()->ideas()->create($validated);

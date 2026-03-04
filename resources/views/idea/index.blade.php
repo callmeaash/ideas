@@ -51,7 +51,16 @@
 
     <x-modal name="create-idea" title="New Idea">
         
-        <form x-data="{'status': 'pending'}" action="{{ route('idea.store') }}" method="POST" class="space-y-4 mt-5">
+        <form
+            x-data="{
+                'status': 'pending',
+                'newLink': '',
+                'links': [],
+                }"
+            action="{{ route('idea.store') }}"
+            method="POST"
+            class="space-y-4 mt-5"
+        >
             @csrf
             <x-form.field
                 name="title"
@@ -83,8 +92,44 @@
                 placeholder="Describe your idea....."
             />
 
+            <div class="space-y-3">
+                <label for="" class="label">Links</label>
+
+                <template x-for="(link, index) in links">
+                    <div class="flex gap-x-2">
+                        <input type="text" name="links[]" x-model="link" class="input flex-1">
+
+                        <button
+                            type="button"
+                            @click="links.splice(index, 1)">
+                            <x-icons.cross class="text-red-500"/>
+                        </button>
+                    </div>
+                </template>
+
+
+                <div class="flex gap-x-2">
+                    <input
+                        type="url"
+                        x-model="newLink"
+                        data-test="new-link"
+                        placeholder="https://example.com"
+                        autocomplete="url"
+                        class="input flex-1"
+                    >
+                    <button 
+                        type="button"
+                        data-test="add-link-btn"
+                        @click="links.push(newLink.trim()); newLink=''"
+                        :disabled="!newLink"
+                    >
+                        <x-icons.plus />
+                    </button>
+                </div>
+            </div>
+
             <div class="flex justify-end gap-x-3">
-                <button type="button" @click="show=false" class="btn btn-outlined">Cancel</button>
+                <button type="reset" @click="show=false" class="btn btn-outlined">Cancel</button>
                 <button type="submit" class="btn" data-test="create-idea-submit">Create</button>
             </div>
         </form>
