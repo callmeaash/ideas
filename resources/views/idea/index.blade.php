@@ -56,6 +56,8 @@
                 'status': 'pending',
                 'newLink': '',
                 'links': [],
+                'newStep': '',
+                'steps': []
                 }"
             action="{{ route('idea.store') }}"
             method="POST"
@@ -91,6 +93,41 @@
                 type="textarea"
                 placeholder="Describe your idea....."
             />
+
+            <div class="space-y-3">
+                <label for="" class="label">Actionable Steps</label>
+
+                <template x-for="(step, index) in steps">
+                    <div class="flex gap-x-2">
+                        <input type="text" name="steps[]" x-model="step" class="input flex-1">
+
+                        <button
+                            type="button"
+                            @click="steps.splice(index, 1)">
+                            <x-icons.cross class="text-red-500"/>
+                        </button>
+                    </div>
+                </template>
+
+
+                <div class="flex gap-x-2">
+                    <input
+                        type="url"
+                        x-model="newStep"
+                        data-test="new-step"
+                        placeholder="Do this thing"
+                        class="input flex-1"
+                    >
+                    <button 
+                        type="button"
+                        data-test="add-step-btn"
+                        @click="steps.push(newStep.trim()); newStep=''"
+                        :disabled="!newStep"
+                    >
+                        <x-icons.plus />
+                    </button>
+                </div>
+            </div>
 
             <div class="space-y-3">
                 <label for="" class="label">Links</label>

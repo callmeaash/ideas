@@ -4,6 +4,7 @@ use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StepController;
 
 Route::middleware('auth')->group(function () {
 
@@ -12,6 +13,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show');
     Route::post('/ideas', [IdeaController::class, 'store'])->name('idea.store');
     Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy');
+    Route::patch('/step/{step}', [StepController::class, 'update'])->name('step.update');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });
 

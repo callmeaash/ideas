@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\StoreIdeaRequest;
+use App\Http\Requests\UpdateIdeaRequest;
 
 class IdeaController extends Controller
 {
@@ -37,20 +39,17 @@ class IdeaController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreIdeaRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => ['string', 'required', 'min:3', 'max:255'],
-            'description' => ['string', 'nullable'],
-            'status' => ['required', Rule::enum(IdeaStatus::class)],
-            'links' => ['nullable', 'array'],
-            'links.*' => ['string', 'url'],
-        ]);
+        $idea = auth()->user()->ideas()->create($request->safe()->except('steps'));
 
-        auth()->user()->ideas()->create($validated);
+        $idea->steps()->createMany(
+            collect($request->safe()->steps ?? [])->map(fn($step) => ['description' => $step])
+        );
 
         return redirect()->route('home')->with('success', 'Idea created successfully!');
     }

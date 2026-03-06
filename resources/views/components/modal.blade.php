@@ -32,4 +32,5 @@
         </div>
     </x-idea.card>
 
+    
 </div>
