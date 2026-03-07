@@ -1,11 +1,10 @@
 @props([
     'name',
     'title',
-    'errorBag' => 'default',
 ])
 
 <div 
-    x-data="{ show: @js($errors->getBag($errorBag)->isNotEmpty()), name: @js($name) }"
+    x-data="{ show: false, name: @js($name) }"
     x-show="show"
     @keydown.escape.window="show = false"
     @open-model.window="show = $event.detail === name"
@@ -20,7 +19,7 @@
     class="fixed z-50 inset-0 bg-black/50 flex items-center justify-center backdrop-blur-xs"
 >
 
-    <x-idea.card @click.away="show=false" class="max-w-2xl w-full mx-4 shadow-xl max-h-[80dvh] overflow-auto">
+    <x-idea.card as="div" @click.away="show=false" class="max-w-2xl w-full mx-4 shadow-xl max-h-[80dvh] overflow-auto">
         <div class="flex justify-between">
             <h2 id="model-{{ $name }}-title" class="font-bold text-xl">{{ $title }}</h2>
 
@@ -31,6 +30,4 @@
             {{ $slot }}
         </div>
     </x-idea.card>
-
-    
 </div>

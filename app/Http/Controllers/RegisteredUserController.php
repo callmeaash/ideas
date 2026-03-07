@@ -16,6 +16,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
+
     public function store(Request $request)
     {
         $attributes = $request->validate([
@@ -27,6 +28,7 @@ class RegisteredUserController extends Controller
         $user = User::create($attributes);
 
         auth()->login($user);
+
 
         return redirect()->route('home');
     }

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\StoreIdeaRequest;
-use App\Http\Requests\UpdateIdeaRequest;
+use App\Actions\CreateIdea;
+use Illuminate\Support\Facades\Gate;
 
 class IdeaController extends Controller
 {
@@ -43,13 +42,9 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIdeaRequest $request): RedirectResponse
+    public function store(StoreIdeaRequest $request, CreateIdea $action)
     {
-        $idea = auth()->user()->ideas()->create($request->safe()->except('steps'));
-
-        $idea->steps()->createMany(
-            collect($request->safe()->steps ?? [])->map(fn($step) => ['description' => $step])
-        );
+        $action->handle($request->safe()->all());
 
         return redirect()->route('home')->with('success', 'Idea created successfully!');
     }
@@ -59,6 +54,8 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea): View
     {
+
+        Gate::authorize('workWith', $idea);
         return view('idea.show', [
             'idea' => $idea,
         ]);
@@ -69,7 +66,7 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea): void
     {
-        //
+        Gate::authorize('workWith', $idea);
     }
 
     /**
@@ -77,14 +74,17 @@ class IdeaController extends Controller
      */
     public function update(Request $request, Idea $idea): void
     {
-        //
+        Gate::authorize('workWith', $idea);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Idea $idea): void
+    public function destroy(Idea $idea)
     {
-        //
+        Gate::authorize('workWith', $idea);
+        $idea->delete();
+
+        return redirect()->route('home')->with('success', 'Idea deleted successfully!');
     }
 }

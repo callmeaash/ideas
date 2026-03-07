@@ -11,7 +11,7 @@
 
             <x-form.field label="Confirm Password" name="password_confirmation" type="password" />
 
-            <button type="submit" class="btn mt-2 h-10 w-full">Register</button>
+            <button data-test="register-submit" type="submit" class="btn mt-2 h-10 w-full">Register</button>
         </form>
     </x-form>
 </x-layout>

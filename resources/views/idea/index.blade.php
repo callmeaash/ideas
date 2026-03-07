@@ -31,6 +31,13 @@
 
                 @forelse ($ideas as $idea)
                     <x-idea.card href="{{ route('idea.show', $idea->id) }}">
+
+                        @if ($idea->image)
+                            <div class=" -mx-4 -mt-4 mb-4 h-80 rounded-lg overflow-hidden">
+                                <img src="{{ asset('storage/' . $idea->image) }}" alt="{{ $idea->title }}" class="w-full h-full object-cover">
+                            </div>
+                        @endif  
+
                         <h3 class="text-foreground text-lg">{{ $idea->title }}</h3>
 
                         <x-idea.status-label class="{{ $idea->status->color() }}">
@@ -57,10 +64,12 @@
                 'newLink': '',
                 'links': [],
                 'newStep': '',
-                'steps': []
+                'steps': [],
+                'hasImage': false,
                 }"
             action="{{ route('idea.store') }}"
             method="POST"
+            x-bind:enctype="hasImage ? 'multipart/form-data' : 'application/x-www-form-urlencoded'"
             class="space-y-4 mt-5"
         >
             @csrf
@@ -69,6 +78,7 @@
                 label="Title"
                 placeholder="Enter a title for your Idea"
                 autofocus
+                data-test="idea-title"
             />
 
             <div>
@@ -92,7 +102,15 @@
                 label="Description"
                 type="textarea"
                 placeholder="Describe your idea....."
+                data-test="idea-description"
             />
+
+
+            <div class="space-y-3">
+                <label for="image" class="label">Featured Image </label>
+                <input type="file" name="image" accept="image/*" @change="hasImage = true">
+                <x-form.error name="image"/>
+            </div>
 
             <div class="space-y-3">
                 <label for="" class="label">Actionable Steps</label>

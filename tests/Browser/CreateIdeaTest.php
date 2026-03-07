@@ -8,13 +8,14 @@ it('create an idea', function () {
 
     visit('/ideas')
         ->click('@create-idea-btn')
-        ->fill('title', 'Test Idea')
-        ->fill('description', 'Test Description')
+        ->fill('@idea-title', 'Test Idea')
+        ->fill('@idea-description', 'Test Description')
         ->fill('@new-link', 'https://example.com')
         ->click('@add-link-btn')
         ->click('@create-idea-submit')
         ->assertPathIs('/ideas');
 
+    expect(Idea::count())->toBe(1);
     expect(Idea::first()->title)->toBe('Test Idea');
     expect(Idea::first()->links->toArray())->toBe(['https://example.com']);
 });
