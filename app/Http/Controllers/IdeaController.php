@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreIdeaRequest;
 use App\Actions\CreateIdea;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class IdeaController extends Controller
 {
@@ -62,19 +63,29 @@ class IdeaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Idea $idea): void
-    {
-        Gate::authorize('workWith', $idea);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Idea $idea): void
+    public function update(StoreIdeaRequest $request, Idea $idea): RedirectResponse
     {
         Gate::authorize('workWith', $idea);
+
+        if ($request->remove_image && $idea->image) {
+            Storage::disk('public')->delete($idea->image);
+            $idea->image = null;
+        }
+
+        if ($request->hasFile('image')) {
+            if ($idea->image) {
+                Storage::disk('public')->delete($idea->image);
+            }
+            $idea->image = $request->file('image')->store('ideas', 'public');
+        }
+
+        $idea->save();
+        
+        $idea->update($request->safe()->except('image'));
+
+        return redirect()->back();
     }
 
     /**

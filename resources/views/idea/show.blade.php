@@ -8,7 +8,7 @@
             </a>
 
             <div class="flex gap-x-2 items-center">
-                <button class="btn btn-outlined">
+                <button class="btn btn-outlined" x-data @click="$dispatch('open-model', 'edit-idea')">
                     <x-icons.edit />
                     Edit Idea
                 </button>
@@ -40,9 +40,12 @@
                 <span class="text-muted-foreground">{{ $idea->created_at->diffForHumans() }}</span>
             </div>
 
-            <x-idea.card class="mt-6">
-                <p class="text-muted-foreground cursor-pointer max-w-none">{{ $idea->description }}</p>
-            </x-idea.card>
+
+            @if ($idea->description)
+                <x-idea.card class="mt-6">
+                    <p class="text-muted-foreground cursor-pointer max-w-none">{{ $idea->description }}</p>
+                </x-idea.card>
+            @endif
 
 
             @if ($idea->steps->count())
@@ -82,4 +85,6 @@
             @endif
         </div>
     </div>
+
+    <x-idea.modal :idea="$idea"/>
 </x-layout>

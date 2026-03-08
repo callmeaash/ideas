@@ -29,3 +29,4 @@ it('fail to create idea', function () {
 
     expect(Idea::count())->toBe(0);
 });
+
