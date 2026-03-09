@@ -67,7 +67,11 @@ class IdeaController extends Controller
     {
         Gate::authorize('workWith', $idea);
 
-        if ($request->remove_image && $idea->image) {
+        $idea->fill($request->safe()->only([
+            'title', 'description', 'status', 'links',
+        ]));
+
+        if ($request->boolean('remove_image') && $idea->image) {
             Storage::disk('public')->delete($idea->image);
             $idea->image = null;
         }
@@ -80,8 +84,6 @@ class IdeaController extends Controller
         }
 
         $idea->save();
-
-        $idea->update($request->safe()->except('image'));
 
         return redirect()->back();
     }

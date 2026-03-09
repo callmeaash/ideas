@@ -33,7 +33,7 @@
                     <x-idea.card href="{{ route('idea.show', $idea->id) }}">
 
                         @if ($idea->image)
-                            <div class=" -mx-4 -mt-4 mb-4 h-80 rounded-lg overflow-hidden">
+                            <div class=" -mx-4 -mt-4 mb-4 h-64 rounded-lg overflow-hidden">
                                 <img src="{{ asset('storage/' . $idea->image) }}" alt="{{ $idea->title }}" class="w-full h-full object-cover">
                             </div>
                         @endif  

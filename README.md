@@ -28,17 +28,18 @@ The project includes a convenient setup script that handles dependency installat
 git clone https://github.com/callmeaash/ideas.git
 cd ideas
 
-# Run the setup script
-composer run setup
-```
+# Install dependencies
+composer install
 
-### Development
+# Create and configure .env file
+cp .env.example .env
 
-To start the development server (including Vite for assets and Pail for logs):
+# Run migrations
+php artisan migrate
 
-```bash
-composer run dev
-```
+# Install and build frontend dependencies
+npm install
+npm run build
 
 ## Testing
 
@@ -55,4 +56,7 @@ composer run pest
 - **Testing**: [Pest PHP](https://pestphp.com)
 - **Static Analysis**: [Rector](https://getrector.com)
 - **Formatting**: [Laravel Pint](https://laravel.com/docs/11.x/pint)
-- **Database**: SQLite (default)
+
+## Screenshots
+
+[image]

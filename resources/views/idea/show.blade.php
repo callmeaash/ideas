@@ -23,8 +23,8 @@
 
         <div class="mt-8 space-y-6">
             @if ($idea->image)
-                <div class="rounded-lg overflow-hidden">
-                    <img src="{{ asset('storage/' . $idea->image) }}" alt="{{ $idea->title }}" class="w-full h-auto object-cover">
+                <div class="rounded-lg overflow-hidden h-64">
+                    <img src="{{ asset('storage/' . $idea->image) }}" alt="{{ $idea->title }}" class="w-full h-full object-cover">
                 </div>
             @endif  
         </div>
