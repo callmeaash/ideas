@@ -53,7 +53,6 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea): View
     {
-
         Gate::authorize('workWith', $idea);
 
         return view('idea.show', [
