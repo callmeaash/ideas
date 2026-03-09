@@ -9,6 +9,7 @@ use App\Http\Requests\StoreIdeaRequest;
 use App\Models\Idea;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -67,23 +68,32 @@ class IdeaController extends Controller
     {
         Gate::authorize('workWith', $idea);
 
-        $idea->fill($request->safe()->only([
-            'title', 'description', 'status', 'links',
-        ]));
+        DB::transaction(function () use ($request, $idea) {
+            $idea->fill($request->safe()->only([
+                'title', 'description', 'status', 'links',
+            ]));
 
-        if ($request->boolean('remove_image') && $idea->image) {
-            Storage::disk('public')->delete($idea->image);
-            $idea->image = null;
-        }
-
-        if ($request->hasFile('image')) {
-            if ($idea->image) {
+            if ($request->boolean('remove_image') && $idea->image) {
                 Storage::disk('public')->delete($idea->image);
+                $idea->image = null;
             }
-            $idea->image = $request->file('image')->store('ideas', 'public');
-        }
 
-        $idea->save();
+            if ($request->hasFile('image')) {
+                if ($idea->image) {
+                    Storage::disk('public')->delete($idea->image);
+                }
+                $idea->image = $request->file('image')->store('ideas', 'public');
+            }
+
+            $idea->save();
+
+            $idea->steps()->delete();
+
+            $steps = collect($request->validated('steps') ?? [])
+                ->map(fn ($step) => ['description' => $step]);
+
+            $idea->steps()->createMany($steps);
+        });
 
         return redirect()->back();
     }
