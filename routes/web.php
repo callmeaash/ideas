@@ -3,8 +3,8 @@
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StepController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 

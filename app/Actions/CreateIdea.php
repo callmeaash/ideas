@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Idea;
-use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
 
 class CreateIdea
 {
@@ -15,12 +15,11 @@ class CreateIdea
         //
     }
 
-    public function handle(array $attributes)
+    public function handle(array $attributes): void
     {
         $data = collect($attributes)->only([
-            'title', 'description', 'status', 'links'
+            'title', 'description', 'status', 'links',
         ])->toArray();
-
 
         if (isset($attributes['image'])) {
             $data['image'] = $attributes['image']->store('ideas', 'public');
@@ -29,8 +28,8 @@ class CreateIdea
         DB::transaction(function () use ($data, $attributes) {
             $idea = $this->user->ideas()->create($data);
 
-            $steps = collect($attributes['steps'] ?? [])->map(fn($step) => ['description' => $step]);
-            
+            $steps = collect($attributes['steps'] ?? [])->map(fn ($step) => ['description' => $step]);
+
             $idea->steps()->createMany($steps);
         });
     }

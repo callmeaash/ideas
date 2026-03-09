@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Idea;
 use App\Models\User;
 
@@ -8,7 +9,6 @@ it('checks authentication', function () {
     $this->get(route('idea.show', $idea->id))->assertRedirectToRoute('login');
 });
 
-
 it('checks authorization', function () {
     $user = User::factory()->create();
 
@@ -17,7 +17,7 @@ it('checks authorization', function () {
     $idea = Idea::factory()->create();
 
     $this->get(route('idea.show', $idea->id))->assertForbidden();
-    
+
 });
 
 it('shows the idea if the user is the owner', function () {
