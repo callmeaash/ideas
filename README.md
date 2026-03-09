@@ -59,4 +59,9 @@ composer run pest
 
 ## Screenshots
 
-[image]
+![Login Page](screenshots/login.png)
+![Home Page](screenshots/homepage.png)
+![Home Page](screenshots/homepage2.png)
+![Create Idea](screenshots/createIdea.png)
+![Show Idea](screenshots/showIdea.png)
+![Show Idea](screenshots/showIdea2.png)
